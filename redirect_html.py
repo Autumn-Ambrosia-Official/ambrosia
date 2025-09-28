@@ -1,9 +1,22 @@
 from flask import Flask, redirect
+from flask_limiter import Limiter
+from flask_talisman import Talisman
 
 app = Flask(__name__)
 
 i = 0
 
+
+
+Talisman(app, content_security_policy=None, force_https=True)
+
+limiter = Limiter(
+    app=app,
+    key_func=get_ipaddr,
+    default_limits=["100 per hour"]
+)
+
+@limiter.limit("50 per hour")
 @app.route('/')
 def home():
   global i
