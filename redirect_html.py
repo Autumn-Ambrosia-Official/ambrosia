@@ -11,7 +11,7 @@ def home():
     html_link = ["https://index-autumn.onrender.com", "https://autumn-ambrosia.pages.dev"]
     index = len(html_link)
     i += 1
-    if i == index:
+    if i > index:
       i = 0
 
     return redirect(html_link[i])
