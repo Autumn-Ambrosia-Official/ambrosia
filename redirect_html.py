@@ -31,5 +31,10 @@ def home():
   except:
     return "<h2>Failed to redirect. Please try again</h2>"
 
+@limiter.limit("40 per hour")
+@app.route('/wake')
+def wake():
+    return "w"
+
 if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0")
