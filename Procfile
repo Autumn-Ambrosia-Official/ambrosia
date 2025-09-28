@@ -1,1 +1,1 @@
-web: gunicorn receive_order:app
+web: gunicorn redirect_html:app
