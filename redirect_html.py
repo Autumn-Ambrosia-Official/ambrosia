@@ -7,6 +7,10 @@ app = Flask(__name__)
 i = 0
 
 
+def get_ipaddr():
+    if "X-Forwarded-For" in request.headers:
+        return request.headers.get("X-Forwarded-For").split(",")[0].strip()
+    return request.remote_addr
 
 Talisman(app, content_security_policy=None, force_https=True)
 
@@ -22,12 +26,8 @@ def home():
   global i
   try:
     html_link = ["https://index-autumn.onrender.com", "https://autumn-ambrosia.pages.dev"]
-    index = len(html_link)
-    i += 1
-    if i > index:
-      i = 0
 
-    return redirect(html_link[i])
+    return redirect(html_links[i % len(html_links)])
   except:
     return "<h2>Failed to redirect. Please try again</h2>"
 
