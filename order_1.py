@@ -17,7 +17,7 @@ from upstash_redis import Redis
 
 
 
-r = Redis(url="https://enormous-mastodon-11551.upstash.io", token="AS0fAAIncDJkYTk4MzFhMmY3Yjg0MDQ5YTBiY2Y1NDRlNzk0MTAzYXAyMTE1NTE")
+r = Redis(url="https://wealthy-filly-14272.upstash.io", token="ATfAAAIncDJmNGNiYWE4NDAxMGY0NDYyOTA1OWFjMTM3NWIwNzdiMXAyMTQyNzI")
 
 
 
