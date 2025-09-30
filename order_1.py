@@ -36,7 +36,7 @@ client = gspread.authorize(creds)
 
 creds_json2 = os.environ.get("service-ambrosia-3")
 creds_dict2 = json.loads(creds_json2)
-creds2 = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+creds2 = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict2, scope)
 # Authorize the client
 client2 = gspread.authorize(creds2)
 
@@ -95,16 +95,13 @@ def sanitize_for_sheet(value):
         
 
 def check_phone(phone_num):
-        if not re.match("[0-9]{10}",phone_num):
-                return "<h4>The phone number doesn't match the required format.</h4>"
-        elif phone_num is None or phone_num == "":
-              phone_num = 'None'
-        else:
-                return "<h4>The phone number doesn't match the required format.</h4>"
+    if not phone_num or not re.fullmatch(r"\d{10}", phone_num):
+        return "<h4>The phone number must be exactly 10 digits.</h4>"
+    return None
 
 def check_class(userclass):
         if userclass in list_class:
-           break
+           return None
         elif userclass is None:
            return "Please provide details about the class."
         else:
@@ -276,9 +273,12 @@ def confirm():
                 payment_method = request.form.get("payment_method")
                 phone_num = request.form.get("user_phone")
             
-                check_email(email)
-                check_class(userclass)
-                check_phone(phone_num)
+                error_email = check_email(email)
+                error_class = check_class(userclass)
+                error_phone = check_phone(phone_num)
+
+                if error_email or error_class or error_phone:
+                      return f"{error_email or ''}<br>{error_class or ''}<br>{error_phone or ''}"
             
                 if payment_method is None:
                         return "<h4>Please choose a payment method.</h4>"
@@ -302,7 +302,7 @@ def confirm():
                              if random.choice(service_accounts) == service_accounts[0]:
                                   sheet_customer_tng.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num), sanitize_for_sheet(transaction_name), total])
                              else: 
-                                   sheet2_customer_tng.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num), sanitize_for_sheet(transaction_name), total])
+                                   sheet_customer_tng2.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num), sanitize_for_sheet(transaction_name), total])
                                      
                              email_data = {"order": orderdata["order"], "email": email}
                              response = re.post("https://script.google.com/macros/s/AKfycbxqeU1Xxzb4ktlnu1BoSvjYk0O3uwnCAP3UVB4SH6kPX3BZMPWQFTMsXGnSadTavmuw/exec", json=email_data, headers={'Content-Type':'application/json'})
