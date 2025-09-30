@@ -216,12 +216,29 @@ function check_touch() {
   }
 }
 
-    function check_email():
-      const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      let email = document.getElementById("email_input").value.trim();
-      if not (pattern.test(email)) {
-          alert("invalid email format");
-      }
+    function checkEmail(email) {
+    const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const minLength = 5;
+    const maxLength = 254;
+
+    if (!email || email.trim() === "") {
+        alert("Please provide your email.");
+    }
+
+    email = email.trim();
+
+    if (email.length < minLength) {
+        alert(`Email is too short. Minimum length is ${minLength} characters.`);
+    }
+
+    if (email.length > maxLength) {
+        alert(`Email is too long. Maximum length is ${maxLength} characters.`);
+    }
+
+    if (!pattern.test(email)) {
+        alert("The provided email doesn't meet the correct format");
+    }
+}
     
   </script>
 </html>
