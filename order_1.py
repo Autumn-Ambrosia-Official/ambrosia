@@ -29,21 +29,25 @@ scope = ['https://spreadsheets.google.com/feeds',
 
 creds_json = os.environ.get("service-ambrosia-1")
 creds_dict = json.loads(creds_json)
-
-# Load your service account credentials JSON file
-# Load your service account credentials JSON file
-
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
-
-
 # Authorize the client
 client = gspread.authorize(creds)
+
+creds_json2 = os.environ.get("service-ambrosia-3")
+creds_dict2 = json.loads(creds_json2)
+creds2 = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
+# Authorize the client
+client2 = gspread.authorize(creds)
 
 
 
 # Open your Google Sheet by name
 sheet_customer_cash = client.open('Customer Order').worksheet('table_cash')
 sheet_customer_tng = client.open('Customer Order').worksheet('table_tng')
+
+
+sheet_customer_cash2 = client2.open('Customer Order').worksheet('table_cash')
+sheet_customer_tng2 = client2.open('Customer Order').worksheet('table_tng')
 
 sheet_product = client.open('Official Product Database').worksheet('Products')  
 
@@ -90,10 +94,6 @@ def sanitize_for_sheet(value):
         return "'" + value
     return value
 
-
-
-# Start background thread
-threading.Thread(target=schedule_data_load, daemon=True).start()
 
 
 CORS(
