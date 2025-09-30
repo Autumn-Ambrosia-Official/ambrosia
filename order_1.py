@@ -94,7 +94,7 @@ threading.Thread(target=schedule_data_load, daemon=True).start()
 CORS(
     app,
     supports_credentials=True,
-    origins=["https://index-autumn.onrender.com", "https://autumns-ambrosia-store.pages.dev"],
+    origins=["https://index-autumn.onrender.com", "https://autumns-ambrosia-store.pages.dev","https://autumns-ambrosia-preorder.pages.dev"],
     methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"]
 )
