@@ -95,6 +95,7 @@ def sanitize_for_sheet(value):
 threading.Thread(target=schedule_data_load, daemon=True).start()
 
 csp = {
+    'img-src': '*',
     'script-src': ["'self'"],
     'style-src': ["'self'", "'unsafe-inline'"],
 }
