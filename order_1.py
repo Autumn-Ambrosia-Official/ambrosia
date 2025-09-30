@@ -14,6 +14,7 @@ import datetime as d
 import time
 import os
 import random
+import re
 from flask_wtf.csrf import generate_csrf
 from upstash_redis import Redis
 
@@ -53,8 +54,9 @@ sheet_product = client.open('Official Product Database').worksheet('Products')
 
 sheet_product_two = client.open('Official Product Database').worksheet('Topping')
 
+lock = threading.Lock()
 
-
+pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
 def load_data():
     global name_list
@@ -74,6 +76,8 @@ def load_data():
 
 load_data()
 
+list_class = ['other', 'not in this school', 'primary', '7P', '7U', '7C', '7H', '7O', '7N', '7G', '8P', '8U', '8C', '8H', '8O', '8N', '8G', '9P', '9U', '9C', '9H', '9O', '9N', '9G', '10P', '10U', '10C', '10H', '10O', '10N', '10G', '11P', '11U', '11C', '11H', '11O', '11N', '11G']
+
 def get_ipaddr():
     # If behind a proxy/load balancer, use the first IP in X-Forwarded-For
     if "X-Forwarded-For" in request.headers:
@@ -84,17 +88,28 @@ def get_ipaddr():
 
 app = Flask(__name__)
 
-def schedule_data_load():
-    while True:
-        load_data()
-        time.sleep(60 * 60 * 12)
-
 def sanitize_for_sheet(value):
     if isinstance(value, str) and value and value[0] in ('=', '+', '-', '@'):
         return "'" + value
     return value
 
+def check_class(userclass):
+        for x in list_class:
+        if userclass == x:
+           break
+        elif userclass is None:
+           return "Please provide details about the class."
+        else:
+           return "<h3>For the class input you can only type these values to it.</h3><br><p>'other', 'not in this school', 'primary', '7P', '7U', '7C', '7H', '7O', '7N', '7G', '8P', '8U', '8C', '8H', '8O', '8N', '8G', '9P', '9U', '9C', '9H', '9O', '9N', '9G', '10P', '10U', '10C', '10H', '10O', '10N', '10G', '11P', '11U', '11C', '11H', '11O', '11N', '11G'</p>"
 
+def check_email(email):
+        if email is None:
+                return "<h3>Please provide your email.</h3>"
+        else:
+                if not re.match(pattern, email):
+                        return "<h3>The provided email doesn't meet the correct format</h3>"
+                else:
+                        pass
 
 CORS(
     app,
@@ -241,12 +256,10 @@ def confirm():
                 transaction_name = request.form.get("transaction_name")
                 payment_method = request.form.get("payment_method")
                 phone_num = request.form.get("user_phone")
-                if email is None:
-                        return "Please provide your email."
+                check_email(email)
                 if payment_method is None:
                         return "<h4>Please choose a payment method.</h4>"
-                if userclass is None:
-                        return "Please provide details about the class."
+                check_class(userclass)
                 if phone_num is None:
                         phone_num = 'None'
                 elif payment_method == "cash":
@@ -259,6 +272,7 @@ def confirm():
                            email_data = {"order": orderdata["order"], "email": email}
                            response = re.post("https://script.google.com/macros/s/AKfycbxqeU1Xxzb4ktlnu1BoSvjYk0O3uwnCAP3UVB4SH6kPX3BZMPWQFTMsXGnSadTavmuw/exec", json=email_data, headers={'Content-Type':'application/json'})
                            print(response.status_code)
+                           r.delete(token)
                         except Exception as e:
                             return f"Error in confirm: {str(e)}" 
                 else:
@@ -272,6 +286,7 @@ def confirm():
                              email_data = {"order": orderdata["order"], "email": email}
                              response = re.post("https://script.google.com/macros/s/AKfycbxqeU1Xxzb4ktlnu1BoSvjYk0O3uwnCAP3UVB4SH6kPX3BZMPWQFTMsXGnSadTavmuw/exec", json=email_data, headers={'Content-Type':'application/json'})
                              print(response.status_code)
+                             r.delete(token)
                             except Exception as e:
                               return f"Error in confirm: {str(e)}"
                         else:
@@ -291,5 +306,19 @@ def gspread_error():
 def wake_up():
    return "w"
 
+@app.route("/reload", methods=["GET"])
+def reload():
+ try:
+   load_data()
+   return "Success"
+ except:
+   return "Failed"
+ 
 if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0")
+
+
+                        
+
+
+
