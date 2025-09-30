@@ -177,7 +177,7 @@
           <input type="text" name="transaction_name" id="transaction_name_id" class="input_text">
           <br>
           <h4 class="input_form">Your email:</h4>
-          <input type="email" name="user_email" class="input_text" required>
+          <input id="email_input" type="email" name="user_email" class="input_text" required>
           <br>
           <h4 class="input_form">Your class:</h4>
           <input type="text" name="user_class" class="input_text" required>
@@ -215,5 +215,13 @@ function check_touch() {
     qrCode.style.display = "none";
   }
 }
+
+    function check_email():
+      const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      let email = document.getElementById("email_input").value.trim();
+      if not (pattern.test(email)) {
+          alert("invalid email format");
+      }
+    
   </script>
 </html>
