@@ -13,7 +13,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import datetime as d
 import time
 import os
-import threading
+import random
 from flask_wtf.csrf import generate_csrf
 from upstash_redis import Redis
 
@@ -39,7 +39,7 @@ creds2 = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 # Authorize the client
 client2 = gspread.authorize(creds)
 
-
+service_accounts = ["client", "client2"]
 
 # Open your Google Sheet by name
 sheet_customer_cash = client.open('Customer Order').worksheet('table_cash')
@@ -251,9 +251,10 @@ def confirm():
                         phone_num = 'None'
                 elif payment_method == "cash":
                         try:
-                           orderdata["Email"] = email
-                           orderdata["Payment_Method"] = payment_method
-                           sheet_customer_cash.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num),total])
+                           if random.choice(service_accounts) == service_accounts[0]: 
+                             sheet_customer_cash.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num),total])
+                           else:
+                             sheet_customer_cash2.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num),total])
 
                            email_data = {"order": orderdata["order"], "email": email}
                            response = re.post("https://script.google.com/macros/s/AKfycbxqeU1Xxzb4ktlnu1BoSvjYk0O3uwnCAP3UVB4SH6kPX3BZMPWQFTMsXGnSadTavmuw/exec", json=email_data, headers={'Content-Type':'application/json'})
@@ -263,10 +264,11 @@ def confirm():
                 else:
                         if payment_method == "TNG" and transaction_name is not None:
                             try:
-                             orderdata["Email"] = email
-                             orderdata["Payment_Method"] = payment_method
-                             orderdata["Transaction_Name"] = transaction_name
-                             sheet_customer_tng.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num), sanitize_for_sheet(transaction_name), total])
+                             if random.choice(service_accounts) == service_accounts[0]:
+                                  sheet_customer_tng.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num), sanitize_for_sheet(transaction_name), total])
+                             else: 
+                                   sheet2_customer_tng.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num), sanitize_for_sheet(transaction_name), total])
+                                     
                              email_data = {"order": orderdata["order"], "email": email}
                              response = re.post("https://script.google.com/macros/s/AKfycbxqeU1Xxzb4ktlnu1BoSvjYk0O3uwnCAP3UVB4SH6kPX3BZMPWQFTMsXGnSadTavmuw/exec", json=email_data, headers={'Content-Type':'application/json'})
                              print(response.status_code)
