@@ -54,7 +54,6 @@ sheet_product = client.open('Official Product Database').worksheet('Products')
 
 sheet_product_two = client.open('Official Product Database').worksheet('Topping')
 
-lock = threading.Lock()
 
 pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
