@@ -103,13 +103,24 @@ def check_class(userclass):
            return "<h3>For the class input you can only type these values to it.</h3><br><p>'other', 'not in this school', 'primary', '7P', '7U', '7C', '7H', '7O', '7N', '7G', '8P', '8U', '8C', '8H', '8O', '8N', '8G', '9P', '9U', '9C', '9H', '9O', '9N', '9G', '10P', '10U', '10C', '10H', '10O', '10N', '10G', '11P', '11U', '11C', '11H', '11O', '11N', '11G'</p>"
 
 def check_email(email):
-        if email is None:
-                return "<h3>Please provide your email.</h3>"
-        else:
-                if not re.match(pattern, email):
-                        return "<h3>The provided email doesn't meet the correct format</h3>"
-                else:
-                        pass
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    min_length = 5
+    max_length = 254
+
+    if email is None or email.strip() == "":
+        return "<h3>Please provide your email.</h3>"
+    
+    email = email.strip()  # remove leading/trailing spaces
+        
+    if len(email) < min_length:
+        return f"<h3>Email is too short. Minimum length is {min_length} characters.</h3>"
+    
+    if len(email) > max_length:
+        return f"<h3>Email is too long. Maximum length is {max_length} characters.</h3>"
+    
+    if not re.match(pattern, email):
+        return "<h3>The provided email doesn't meet the correct format</h3>"
+    
 
 CORS(
     app,
