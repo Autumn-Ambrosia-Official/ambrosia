@@ -95,7 +95,7 @@ def sanitize_for_sheet(value):
         
 
 def check_phone(phone_num):
-        if not re.match("",phone_num):
+        if not re.match("[0-9]{10}",phone_num):
                 return "<h4>The phone number doesn't match the required format.</h4>"
         elif phone_num is None or phone_num == "":
               phone_num = 'None'
