@@ -1,4 +1,5 @@
 import secrets
+from markupsafe import escape
 from flask import Flask, render_template, redirect, url_for, request,jsonify
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -197,7 +198,7 @@ def confirm():
 
                  if thing[0] not in name_list:
                      print(f"name")
-                     return f"<h4>We do not have {thing[0]} in our menu</h4>"
+                     return f"<h4>We do not have {escape(thing[0])} in our menu</h4>"
                  else:
                      name_index = name_list.index(thing[0])
                  
@@ -226,7 +227,7 @@ def confirm():
                          else:
                                 print("Failed")
                  else:
-                        return f"<h4>We do not have {thing[2]} in our topping menu</h4>"
+                        return f"<h4>We do not have {escape(thing[2])} in our topping menu</h4>"
     
     print("Running")
     orderdata["total"] = total
