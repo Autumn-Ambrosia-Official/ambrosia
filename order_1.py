@@ -94,7 +94,10 @@ def sanitize_for_sheet(value):
 # Start background thread
 threading.Thread(target=schedule_data_load, daemon=True).start()
 
-
+csp = {
+    'script-src': ["'self'"],
+    'style-src': ["'self'", "'unsafe-inline'"],
+}
 
 CORS(
     app,
@@ -104,7 +107,7 @@ CORS(
     allow_headers=["Content-Type", "Authorization"]
 )
 
-Talisman(app, content_security_policy=None, force_https=True)
+Talisman(app, content_security_policy=csp, force_https=True)
 
 limiter = Limiter(
     app=app,
