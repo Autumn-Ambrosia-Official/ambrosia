@@ -84,6 +84,11 @@ def schedule_data_load():
         load_data()
         time.sleep(60 * 60 * 12)
 
+def sanitize_for_sheet(value):
+    if isinstance(value, str) and value and value[0] in ('=', '+', '-', '@'):
+        return "'" + value
+    return value
+
 
 
 # Start background thread
@@ -248,7 +253,8 @@ def confirm():
                         try:
                            orderdata["Email"] = email
                            orderdata["Payment_Method"] = payment_method
-                           sheet_customer_cash.append_row([orderdata["customer"],order_summary,email,userclass,phone_num,total])
+                           sheet_customer_cash.append_row([sanitize_for_sheet(orderdata["customer"]),sanitize_for_sheet(order_summary),sanitize_for_sheet(email),sanitize_for_sheet(userclass),sanitize_for_sheet(phone_num),total])
+
                            email_data = {"order": orderdata["order"], "email": email}
                            response = re.post("https://script.google.com/macros/s/AKfycbxqeU1Xxzb4ktlnu1BoSvjYk0O3uwnCAP3UVB4SH6kPX3BZMPWQFTMsXGnSadTavmuw/exec", json=email_data, headers={'Content-Type':'application/json'})
                            print(response.status_code)
