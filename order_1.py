@@ -92,10 +92,18 @@ def sanitize_for_sheet(value):
     if isinstance(value, str) and value and value[0] in ('=', '+', '-', '@'):
         return "'" + value
     return value
+        
+
+def check_phone(phone_num):
+        if not re.match("",phone_num):
+                return "<h4>The phone number doesn't match the required format.</h4>"
+        elif phone_num is None or phone_num == "":
+              phone_num = 'None'
+        else:
+                return "<h4>The phone number doesn't match the required format.</h4>"
 
 def check_class(userclass):
-        for x in list_class:
-        if userclass == x:
+        if userclass in list_class:
            break
         elif userclass is None:
            return "Please provide details about the class."
@@ -267,12 +275,14 @@ def confirm():
                 transaction_name = request.form.get("transaction_name")
                 payment_method = request.form.get("payment_method")
                 phone_num = request.form.get("user_phone")
+            
                 check_email(email)
+                check_class(userclass)
+                check_phone(phone_num)
+            
                 if payment_method is None:
                         return "<h4>Please choose a payment method.</h4>"
-                check_class(userclass)
-                if phone_num is None:
-                        phone_num = 'None'
+                        
                 elif payment_method == "cash":
                         try:
                            if random.choice(service_accounts) == service_accounts[0]: 
@@ -329,6 +339,9 @@ if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0")
 
 
+
+
+                
                         
 
 
