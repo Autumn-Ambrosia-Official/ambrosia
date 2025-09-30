@@ -215,11 +215,12 @@ function check_touch() {
     qrCode.style.display = "none";
   }
 }
-
-    function checkEmail(email) {
+    
+    function checkEmail() {
     const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const minLength = 5;
     const maxLength = 254;
+    var email = document.getElementById("email_input").value;
 
     if (!email || email.trim() === "") {
         alert("Please provide your email.");
@@ -238,7 +239,21 @@ function check_touch() {
     if (!pattern.test(email)) {
         alert("The provided email doesn't meet the correct format");
     }
-}
-    
+   }
+
+    function checkClass() {
+      const list_class = ;
+      const bool = false;
+      var user_class = document.getElementByName("user_class").value;
+      for (i=0; i < list_class.length; i++) {
+        if (user_class == list_class[i]) {
+          bool = true;
+          break
+        } 
+      }
+      if (!bool) {
+        alert("Class input can only be ")
+      }
+    }
   </script>
 </html>
