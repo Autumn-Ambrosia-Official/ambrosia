@@ -180,6 +180,7 @@
 
         <h4 class="input_form">Your class:</h4>
         <input type="text" name="user_class" class="input_text" required>
+        <p>If you are in primary just put primary. If you are not from Taylor Puchong please put "not in this school".</p>
 
         <h4 class="input_form">Your phone number (optional):</h4>
         <input type="tel" name="user_phone" pattern="[0-9]{10}" class="input_text">
@@ -223,7 +224,7 @@
           submit_button.disabled = false;
           enter = true;
           form.submit(); // submit the form if validation passed
-        }, 1000);
+        }, 2000);
       });
     });
 
@@ -249,8 +250,8 @@
         return false;
       }
 
-      if (email.length > 254) {
-        alert("Email is too long. Maximum length is 254 characters.");
+      if (email.length > 35) {
+        alert("Email is too long. Maximum length is 35 characters.");
         return false;
       }
 
