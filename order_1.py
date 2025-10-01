@@ -94,14 +94,19 @@ def sanitize_for_sheet(value):
         
 
 def check_phone(phone_num):
-    if phone_num is None:
-            phone_num = 'None'
-            return None
-    elif not re.match(r"\d{10}", phone_num):
-            return "<h4>The phone number must be exactly 10 digits.</h4>"
-    else: 
-            return None
+    if not phone_num:  # catches None, "", etc.
+        return None, "None"  # store as "None" or "" as placeholder
+    
+    phone_num = phone_num.strip()
 
+    if phone_num == "":
+        return None, "None"
+
+    # Only validate if it was provided
+    if not re.fullmatch(r"\d{10}", phone_num):
+        return "<h4>The phone number must be exactly 10 digits.</h4>", None
+    return None, phone_num
+        
 def check_class(userclass):
         if userclass in list_class:
            return None
@@ -278,7 +283,7 @@ def confirm():
             
                 error_email = check_email(email)
                 error_class = check_class(userclass)
-                error_phone = check_phone(phone_num)
+                error_phone, phone_num = check_phone(phone_num)
 
                 if error_email or error_class or error_phone:
                       return f"{error_email or ''}<br>{error_class or ''}<br>{error_phone or ''}"
