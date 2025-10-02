@@ -253,8 +253,8 @@ def confirm():
                  else:
                      name_index = name_list.index(thing[0])
 
-                 if thing[1] < 0:
-                     return f"<h4>Selected items must not have the quantity of 0.</h4>"
+                 if thing[1] <= 0:
+                     return f"<h4>Selected items must not have the quantity of 0 or lesser.</h4>"
                  
                  if thing[1] > 40:
                      return f"<h4>Too many</h4>"
