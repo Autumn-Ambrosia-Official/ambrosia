@@ -182,7 +182,7 @@ csrf = CSRFProtect(app)
 
 #First (Get token)
 @csrf.exempt
-@limiter.limit("50 per hour")
+@limiter.limit("100 per hour")
 @app.route("/token")
 def get_token():
     token = secrets.token_urlsafe(16)
@@ -197,7 +197,7 @@ def get_token():
 
 #Token received. Then, frontend sends the order and store the data in memory dictionary 
 @csrf.exempt
-@limiter.limit("50 per hour")
+@limiter.limit("100 per hour")
 @app.route("/submit_order", methods=["POST"])
 def submit_order():
     token = request.args.get("token")
@@ -346,7 +346,7 @@ def wake_up():
    return "w"
 
 @app.route("/reload", methods=["GET"])
-@limiter.limit("50 per hour")
+@limiter.limit("20 per hour")
 def reload():
  try:
    load_data()
