@@ -152,7 +152,7 @@ CORS(
     app,
     supports_credentials=True,
     origins=["https://index-autumn.onrender.com", "https://autumns-ambrosia-store.pages.dev","https://autumns-ambrosia-preorder.pages.dev"],
-    methods=["GET", "POST", "OPTIONS"],
+    methods=["GET", "POST", "OPTIONS", "HEAD"],
     allow_headers=["Content-Type", "Authorization"]
 )
 
@@ -334,7 +334,7 @@ def confirm():
 def gspread_error():
     return "Error"
 
-@app.route("/wake")
+@app.route("/wake", methods=["HEAD"])
 def wake_up():
    return "w"
 
