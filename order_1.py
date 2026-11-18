@@ -17,6 +17,7 @@ import random
 import re
 from flask_wtf.csrf import generate_csrf
 from upstash_redis import Redis
+from prometheus_flask_exporter import PrometheusMetrics
 
 UPSTASH_REDIS_REST_URL="https://grown-mallard-103397.upstash.io"
 UPSTASH_REDIS_REST_TOKEN="gQAAAAAAAZPlAAIgcDIwYzMyNDUzMGIxMGM0ZjExOWJkMmNiNGMxYmY3MWMyOA"
@@ -92,6 +93,16 @@ def get_ipaddr():
     return request.remote_addr
 
 app = Flask(__name__)
+
+# Enable Prometheus metrics
+metrics = PrometheusMetrics(app)
+
+# Custom application information
+metrics.info(
+    "app_info",
+    "Application information",
+    version="1.0.0"
+)
 
 def sanitize_for_sheet(value):
     if isinstance(value, str) and value and value[0] in ('=', '+', '-', '@'):
