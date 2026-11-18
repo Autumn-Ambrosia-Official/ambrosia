@@ -7,3 +7,4 @@ upstash-redis==1.4.0
 flask-limiter==3.5.0
 flask-talisman==1.0.0
 Flask-WTF==1.2.1
+prometheus-flask-exporter
