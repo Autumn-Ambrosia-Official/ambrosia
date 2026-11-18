@@ -18,8 +18,10 @@ import re
 from flask_wtf.csrf import generate_csrf
 from upstash_redis import Redis
 
+UPSTASH_REDIS_REST_URL="https://grown-mallard-103397.upstash.io"
+UPSTASH_REDIS_REST_TOKEN="gQAAAAAAAZPlAAIgcDIwYzMyNDUzMGIxMGM0ZjExOWJkMmNiNGMxYmY3MWMyOA"
 
-r = Redis(url="https://wealthy-filly-14272.upstash.io", token="ATfAAAIncDJmNGNiYWE4NDAxMGY0NDYyOTA1OWFjMTM3NWIwNzdiMXAyMTQyNzI")
+r = Redis(url=UPSTASH_REDIS_REST_URL, token=UPSTASH_REDIS_REST_TOKEN)
 
 
 
